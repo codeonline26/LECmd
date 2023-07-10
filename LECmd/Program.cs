@@ -52,8 +52,8 @@ internal class Program
     private static RootCommand _rootCommand;
 
     private static readonly string Header = $"LECmd version {Assembly.GetExecutingAssembly().GetName().Version}" +
-                                            "\r\n\r\nAuthor: Eric Zimmerman (saericzimmerman@gmail.com)" +
-                                            "\r\nhttps://github.com/EricZimmerman/LECmd";
+                                            "\r\n\r\n作者: Eric Zimmerman (saericzimmerman@gmail.com)" +
+                                            "\r\n汉化:codeonline26";
 
     private static readonly string Footer = @"Examples: LECmd.exe -f ""C:\Temp\foobar.lnk""" + "\r\n\t " +
                                             @"   LECmd.exe -f ""C:\Temp\somelink.lnk"" --json ""D:\jsonOutput"" --pretty" +
@@ -119,76 +119,76 @@ internal class Program
                 description: "File to process. Either this or -d is required"),
             new Option<string>(
                 "-d",
-                description: "Directory to recursively process. Either this or -f is required"),
+                description: "要递归处理的目录。 这个选项或 -f 是必需的"),
             new Option<bool>(
                 "-r",
                 getDefaultValue: () => false,
-                "Only process lnk files pointing to removable drives"),
+                "只处理指向可移动驱动器的lnk文件"),
 
             new Option<bool>(
                 "-q",
                 getDefaultValue: () => false,
-                "Only show the filename being processed vs all output. Useful to speed up exporting to json and/or csv"),
+                "仅显示正在处理的文件名与所有输出。 对于加速导出到 json 和/或 csv 很有用"),
 
             new Option<bool>(
                 "--all",
                 getDefaultValue: () => false,
-                "Process all files in directory vs. only files matching *.lnk"),
+                "处理目录中的所有文件与仅匹配 *.lnk 的文件"),
 
             new Option<string>(
                 "--csv",
-                "Directory to save CSV formatted results to. Be sure to include the full path in double quotes"),
+                "保存 CSV 格式结果的目录。 请务必在双引号中包含完整路径"),
 
             new Option<string>(
                 "--csvf",
-                "File name to save CSV formatted results to. When present, overrides default name\r\n"),
+                "用于保存 CSV 格式结果的文件名。 如果存在，则覆盖默认名称\r\n"),
 
             new Option<string>(
                 "--xml",
-                "Directory to save XML formatted results to. Be sure to include the full path in double quotes"),
+                "保存 XML 格式结果的目录。 请务必在双引号中包含完整路径"),
 
             new Option<string>(
                 "--html",
-                "Directory to save xhtml formatted results to. Be sure to include the full path in double quotes"),
+                "保存 xhtml 格式结果的目录。 请务必在双引号中包含完整路径"),
 
             new Option<string>(
                 "--json",
-                "Directory to save json representation to. Use --pretty for a more human readable layout"),
+                "保存 json 表示的目录。 使用 --pretty 获得更易于阅读的布局"),
 
             new Option<bool>(
                 "--pretty",
                 getDefaultValue: () => false,
-                "When exporting to json, use a more human readable layout"),
+                "导出为 json 时，使用更易读的布局"),
 
             new Option<bool>(
                 "--nid",
                 getDefaultValue: () => false,
-                "Suppress Target ID list details from being displayed"),
+                "禁止显示目标 ID 列表详细信息"),
 
             new Option<bool>(
                 "--neb",
                 getDefaultValue: () => false,
-                "Suppress Extra blocks information from being displayed"),
+                "禁止显示额外块信息"),
 
             new Option<string>(
                 "--dt",
                 getDefaultValue: () => "yyyy-MM-dd HH:mm:ss",
-                "The custom date/time format to use when displaying time stamps. See https://goo.gl/CNVq0k for options"),
+                "显示时间戳时使用的自定义日期/时间格式。 请参阅 https://goo.gl/CNVq0k 了解选项"),
 
             new Option<bool>(
                 "--mp",
                 getDefaultValue: () => false,
-                "Display higher precision for time stamps"),
+                "显示更高精度的时间戳"),
 
             new Option<bool>(
                 "--debug",
                 () => false,
-                "Show debug information during processing"),
+                "在处理过程中显示调试信息"),
 
             new Option<bool>(
                 "--trace",
                 () => false,
-                "Show trace information during processing")
+                "显示处理过程中的跟踪信息")
         };
 
         _rootCommand.Description = Header + "\r\n\r\n" + Footer;
@@ -274,7 +274,7 @@ internal class Program
 
             helpBld.Write(hc);
 
-            Log.Warning("Either -f or -d is required. Exiting");
+            Log.Warning("-f 或 -d 是必需的。 正在退出");
             Console.WriteLine();
             return;
         }
@@ -286,7 +286,7 @@ internal class Program
 
             helpBld.Write(hc);
 
-            Log.Warning("File {F} not found. Exiting",f);
+            Log.Warning("未找到文件 {F}。 正在退出",f);
             Console.WriteLine();
             return;
         }
@@ -299,7 +299,7 @@ internal class Program
 
             helpBld.Write(hc);
 
-            Log.Warning("Directory {D} not found. Exiting",d);
+            Log.Warning("未找到目录 {D}。 退出",d);
             Console.WriteLine();
             return;
         }
@@ -307,12 +307,12 @@ internal class Program
 
         Log.Information("{Header}",Header);
         Console.WriteLine();
-        Log.Information("Command line: {Args}",string.Join(" ", Environment.GetCommandLineArgs().Skip(1)));
+        Log.Information("命令行: {Args}",string.Join(" ", Environment.GetCommandLineArgs().Skip(1)));
         Console.WriteLine();
 
         if (IsAdministrator() == false)
         {
-            Log.Warning($"Warning: Administrator privileges not found!");
+            Log.Warning($"警告：未获得管理员权限！");
             Console.WriteLine();
             Console.WriteLine();
         }
@@ -340,19 +340,19 @@ internal class Program
             catch (UnauthorizedAccessException ua)
             {
                 Log.Error(ua,
-                    "Unable to access {F}. Are you running as an administrator? Error: {Message}",f,ua.Message);
+                    "无法访问 {F} 。 您是否以管理员身份运行？错误: {Message}",f,ua.Message);
                 return;
             }
             catch (Exception ex)
             {
                 Log.Error(ex,
-                    "Error processing file {F} Please send it to saericzimmerman@gmail.com. Error: {Message}",f,ex.Message);
+                    "处理文件 {F} 时出错，请将其发送至 saericzimmerman@gmail.com。 错误: {Message}",f,ex.Message);
                 return;
             }
         }
         else
         {
-            Log.Information("Looking for lnk files in {D}",d);
+            Log.Information("在 {D} 中查找 lnk 文件",d);
             Console.WriteLine();
 
             d = Path.GetFullPath(d);
@@ -439,17 +439,17 @@ internal class Program
             catch (UnauthorizedAccessException ua)
             {
                 Log.Error(ua,
-                    "Unable to access {D}. Error message: {Message}",d,ua.Message);
+                    "无法访问 {D} 。 错误信息: {Message}",d,ua.Message);
                 return;
             }
             catch (Exception ex)
             {
                 Log.Error(ex,
-                    "Error getting lnk files in {D}. Error: {Message}",d,ex.Message);
+                    "在 {D} 中获取 lnk 文件时出错。 错误: {Message}",d,ex.Message);
                 return;
             }
 
-            Log.Information("Found {Length:N0} files",lnkFiles.Length);
+            Log.Information("发现 {Length:N0} 文件",lnkFiles.Length);
             Console.WriteLine();
 
             var sw = new Stopwatch();
@@ -472,11 +472,11 @@ internal class Program
             }
 
             Log.Information(
-                "Processed {ProcessedCount:N0} out of {TotalFiles:N0} files in {TotalSeconds:N4} seconds",lnkFiles.Length - _failedFiles.Count,lnkFiles.Length,sw.Elapsed.TotalSeconds);
+                "在 {TotalSeconds:N4} 秒内处理了 {ProcessedCount:N0} 个文件（共 {TotalFiles:N0} 个）",lnkFiles.Length - _failedFiles.Count,lnkFiles.Length,sw.Elapsed.TotalSeconds);
             if (_failedFiles.Count > 0)
             {
                 Console.WriteLine();
-                Log.Information("Failed files");
+                Log.Information("失败的文件");
                 foreach (var failedFile in _failedFiles)
                 {
                     Log.Information("  {FailedFile}",failedFile);
@@ -498,7 +498,7 @@ internal class Program
                     if (Directory.Exists(csv) == false)
                     {
                         Log.Information(
-                           "{Csv} does not exist. Creating...",csv);
+                           "{Csv} 不存在。 创建中...",csv);
                         Directory.CreateDirectory(csv);
                     }
 
@@ -513,7 +513,7 @@ internal class Program
 
                     csv = Path.GetFullPath(outFile);
                     Log.Information(
-                        "CSV output will be saved to {Path}",Path.GetFullPath(outFile));
+                        "CSV 输出将保存到 {Path}",Path.GetFullPath(outFile));
 
                     try
                     {
@@ -526,7 +526,7 @@ internal class Program
                     catch (Exception ex)
                     {
                         Log.Error(ex,
-                            "Unable to open {OutFile} for writing. CSV export canceled. Error: {Message}",outFile,ex.Message);
+                            "无法打开 {OutFile} 进行写入。 CSV 导出已取消。 错误: {Message}",outFile,ex.Message);
                     }
                 }
 
@@ -535,11 +535,11 @@ internal class Program
                     if (Directory.Exists(json) == false)
                     {
                         Log.Information(
-                            "{Json} does not exist. Creating...",json);
+                            "{Json} 不存在。创建中...",json);
                         Directory.CreateDirectory(json);
                     }
 
-                    Log.Information("Saving json output to {Json}",json);
+                    Log.Information("将 Json 输出保存到 {Json}",json);
                 }
 
                 if (xml?.Length > 0)
@@ -547,11 +547,11 @@ internal class Program
                     {
                         if (Directory.Exists(xml) == false)
                         {
-                            Log.Information("{Xml} does not exist. Creating...",xml);
+                            Log.Information("{Xml} 不存在。创建中...",xml);
                             Directory.CreateDirectory(xml);
                         }
                     }
-                    Log.Information("Saving XML output to {Xml}",xml);
+                    Log.Information("将 XML 输出保存到 {Xml}",xml);
                 }
 
                 XmlTextWriter xmlTextWriter = null;
@@ -590,7 +590,7 @@ internal class Program
 
                     var outFile = Path.Combine(html, outDir, "index.xhtml");
 
-                    Log.Information("Saving HTML output to {OutFile}",outFile);
+                    Log.Information("将 HTML 输出保存到 {OutFile}",outFile);
 
                     xmlTextWriter = new XmlTextWriter(outFile, Encoding.UTF8)
                     {
@@ -618,7 +618,7 @@ internal class Program
                     catch (Exception ex)
                     {
                         Log.Error(ex,
-                            "Error writing record for {SourceFile} to {Csv}. Error: {Message}",processedFile.SourceFile,csv,ex.Message);
+                            "将 {SourceFile} 的记录写入 {Csv} 时出错。 错误: {Message}",processedFile.SourceFile,csv,ex.Message);
                     }
 
                     if (jsonOut != null)
@@ -704,7 +704,7 @@ internal class Program
             }
             catch (Exception ex)
             {
-                Log.Error(ex,"Error exporting data! Error: {Message}",ex.Message);
+                Log.Error(ex,"导出数据时出错！ 错误: {Message}",ex.Message);
             }
         }
     }
@@ -842,7 +842,7 @@ internal class Program
         }
         catch (Exception ex)
         {
-            Log.Error(ex,"Error exporting XML for {SourceFile}. Error: {Message}",csout.SourceFile,ex.Message);
+            Log.Error(ex,"导出 {SourceFile} 的 XML 时出错。 错误: {Message}",csout.SourceFile,ex.Message);
         }
     }
 
